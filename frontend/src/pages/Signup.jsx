@@ -1,13 +1,15 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import api from '../api'
 
 export default function Signup() {
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
   const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     if (!name.trim()) {
       setError('Please enter your name')
@@ -18,9 +20,17 @@ export default function Signup() {
       return
     }
     setError('')
-    localStorage.setItem('pendingPhone', phone)
-    localStorage.setItem('userName', name)
-    navigate('/otp')
+    setLoading(true)
+    try {
+      await api.post('/api/otp/send', { phone })
+      localStorage.setItem('pendingPhone', phone)
+      localStorage.setItem('userName', name)
+      navigate('/otp')
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to send OTP. Try again.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -54,8 +64,8 @@ export default function Signup() {
 
         {error && <p className="error-msg">{error}</p>}
 
-        <button type="submit" className="btn-primary">
-          Send OTP
+        <button type="submit" className="btn-primary" disabled={loading}>
+          {loading ? 'Sending...' : 'Send OTP'}
         </button>
       </form>
 

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import api from '../api'
 
 const OTP_LENGTH = 6
 const RESEND_SECONDS = 30
@@ -8,6 +9,7 @@ export default function Otp() {
   const [digits, setDigits] = useState(Array(OTP_LENGTH).fill(''))
   const [error, setError] = useState('')
   const [secondsLeft, setSecondsLeft] = useState(RESEND_SECONDS)
+  const [loading, setLoading] = useState(false)
   const inputsRef = useRef([])
   const navigate = useNavigate()
   const phone = localStorage.getItem('pendingPhone') || ''
@@ -18,12 +20,17 @@ export default function Otp() {
     return () => clearTimeout(timer)
   }, [secondsLeft])
 
-  const handleResend = () => {
+  const handleResend = async () => {
     if (secondsLeft > 0) return
     setDigits(Array(OTP_LENGTH).fill(''))
     setError('')
-    setSecondsLeft(RESEND_SECONDS)
-    inputsRef.current[0]?.focus()
+    try {
+      await api.post('/api/otp/send', { phone })
+      setSecondsLeft(RESEND_SECONDS)
+      inputsRef.current[0]?.focus()
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to resend OTP')
+    }
   }
 
   const handleChange = (index, value) => {
@@ -42,16 +49,23 @@ export default function Otp() {
     }
   }
 
-  const handleVerify = () => {
+  const handleVerify = async () => {
     const code = digits.join('')
     if (code.length !== OTP_LENGTH) {
       setError('Enter the complete 6-digit code')
       return
     }
-    // Demo flow: any complete 6-digit code is accepted.
     setError('')
-    localStorage.setItem('isVerified', 'true')
-    navigate('/menu')
+    setLoading(true)
+    try {
+      await api.post('/api/otp/verify', { phone, code })
+      localStorage.setItem('isVerified', 'true')
+      navigate('/menu')
+    } catch (err) {
+      setError(err.response?.data?.message || 'Invalid or expired OTP')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -83,8 +97,8 @@ export default function Otp() {
 
       {error && <p className="error-msg">{error}</p>}
 
-      <button className="btn-primary" onClick={handleVerify}>
-        Verify &amp; Continue
+      <button className="btn-primary" onClick={handleVerify} disabled={loading}>
+        {loading ? 'Verifying...' : 'Verify & Continue'}
       </button>
 
       <div className="spacer-grow" />

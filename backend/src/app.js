@@ -3,6 +3,7 @@ const cors = require('cors');
 
 const authRoutes = require('./routes/authRoutes');
 const enquiryRoutes = require('./routes/enquiryRoutes');
+const otpRoutes = require('./routes/otpRoutes');
 
 const app = express();
 
@@ -13,6 +14,7 @@ app.get('/health', (req, res) => res.status(200).json({ status: 'ok' }));
 
 app.use('/api/auth', authRoutes);
 app.use('/api/enquiries', enquiryRoutes);
+app.use('/api/otp', otpRoutes);
 
 // 404 handler
 app.use((req, res) => res.status(404).json({ message: 'Route not found' }));

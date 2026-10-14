@@ -1,0 +1,69 @@
+{
+  "client": "Thunder Client",
+  "collectionName": "CRM Backend",
+  "version": "1.1",
+  "folders": [],
+  "requests": [
+    {
+      "name": "1. Health Check",
+      "url": "{{baseUrl}}/health",
+      "method": "GET",
+      "sortNum": 10000,
+      "headers": []
+    },
+    {
+      "name": "2. Register Employee",
+      "url": "{{baseUrl}}/api/auth/register",
+      "method": "POST",
+      "sortNum": 20000,
+      "headers": [{ "name": "Content-Type", "value": "application/json" }],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"name\": \"Jane Doe\",\n  \"email\": \"jane@brahma.ai\",\n  \"password\": \"secret123\"\n}"
+      }
+    },
+    {
+      "name": "3. Login Employee",
+      "url": "{{baseUrl}}/api/auth/login",
+      "method": "POST",
+      "sortNum": 30000,
+      "headers": [{ "name": "Content-Type", "value": "application/json" }],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"email\": \"jane@brahma.ai\",\n  \"password\": \"secret123\"\n}"
+      }
+    },
+    {
+      "name": "4. Submit Public Enquiry (no auth)",
+      "url": "{{baseUrl}}/api/enquiries",
+      "method": "POST",
+      "sortNum": 40000,
+      "headers": [{ "name": "Content-Type", "value": "application/json" }],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"name\": \"John Student\",\n  \"email\": \"john@example.com\",\n  \"phone\": \"9999999999\",\n  \"courseInterest\": \"MBA\"\n}"
+      }
+    },
+    {
+      "name": "5. Get Unclaimed Enquiries",
+      "url": "{{baseUrl}}/api/enquiries/unclaimed",
+      "method": "GET",
+      "sortNum": 50000,
+      "headers": [{ "name": "Authorization", "value": "Bearer {{token}}" }]
+    },
+    {
+      "name": "6. Claim an Enquiry",
+      "url": "{{baseUrl}}/api/enquiries/{{enquiryId}}/claim",
+      "method": "PATCH",
+      "sortNum": 60000,
+      "headers": [{ "name": "Authorization", "value": "Bearer {{token}}" }]
+    },
+    {
+      "name": "7. Get My Claimed Leads",
+      "url": "{{baseUrl}}/api/enquiries/my-leads",
+      "method": "GET",
+      "sortNum": 70000,
+      "headers": [{ "name": "Authorization", "value": "Bearer {{token}}" }]
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+export const categories = ['All', 'Burgers', 'Pizza', 'Drinks', 'Desserts']
+
+export const menuItems = [
+  {
+    id: 1,
+    name: 'Classic Cheeseburger',
+    desc: 'Beef patty, cheddar, lettuce, tomato',
+    price: 8.99,
+    category: 'Burgers',
+    image: 'https://placehold.co/140x140?text=Burger',
+  },
+  {
+    id: 2,
+    name: 'Double Patty Burger',
+    desc: 'Double beef patty with special sauce',
+    price: 11.49,
+    category: 'Burgers',
+    image: 'https://placehold.co/140x140?text=Burger',
+  },
+  {
+    id: 3,
+    name: 'Margherita Pizza',
+    desc: 'Tomato, mozzarella, fresh basil',
+    price: 12.99,
+    category: 'Pizza',
+    image: 'https://placehold.co/140x140?text=Pizza',
+  },
+  {
+    id: 4,
+    name: 'Pepperoni Pizza',
+    desc: 'Pepperoni, mozzarella, tomato sauce',
+    price: 13.99,
+    category: 'Pizza',
+    image: 'https://placehold.co/140x140?text=Pizza',
+  },
+  {
+    id: 5,
+    name: 'Iced Lemonade',
+    desc: 'Freshly squeezed lemon with mint',
+    price: 3.49,
+    category: 'Drinks',
+    image: 'https://placehold.co/140x140?text=Drink',
+  },
+  {
+    id: 6,
+    name: 'Chocolate Milkshake',
+    desc: 'Rich chocolate shake with cream',
+    price: 4.99,
+    category: 'Drinks',
+    image: 'https://placehold.co/140x140?text=Shake',
+  },
+  {
+    id: 7,
+    name: 'Chocolate Brownie',
+    desc: 'Warm brownie with vanilla ice cream',
+    price: 5.99,
+    category: 'Desserts',
+    image: 'https://placehold.co/140x140?text=Dessert',
+  },
+]

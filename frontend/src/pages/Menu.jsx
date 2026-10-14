@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { categories, menuItems } from '../data/menuItems'
-import { useCart } from '../context/CartContext'
+import { useCart } from '../context/useCart'
 
 export default function Menu() {
   const [activeCategory, setActiveCategory] = useState('All')

@@ -1,14 +1,30 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 const OTP_LENGTH = 6
+const RESEND_SECONDS = 30
 
 export default function Otp() {
   const [digits, setDigits] = useState(Array(OTP_LENGTH).fill(''))
   const [error, setError] = useState('')
+  const [secondsLeft, setSecondsLeft] = useState(RESEND_SECONDS)
   const inputsRef = useRef([])
   const navigate = useNavigate()
   const phone = localStorage.getItem('pendingPhone') || ''
+
+  useEffect(() => {
+    if (secondsLeft <= 0) return
+    const timer = setTimeout(() => setSecondsLeft((s) => s - 1), 1000)
+    return () => clearTimeout(timer)
+  }, [secondsLeft])
+
+  const handleResend = () => {
+    if (secondsLeft > 0) return
+    setDigits(Array(OTP_LENGTH).fill(''))
+    setError('')
+    setSecondsLeft(RESEND_SECONDS)
+    inputsRef.current[0]?.focus()
+  }
 
   const handleChange = (index, value) => {
     const val = value.replace(/\D/g, '').slice(-1)
@@ -40,6 +56,11 @@ export default function Otp() {
 
   return (
     <div className="phone-screen">
+      <div className="top-bar">
+        <button className="icon-btn" onClick={() => navigate('/')}>
+          ←
+        </button>
+      </div>
       <h1 className="title">Verify your number</h1>
       <p className="subtitle">
         We sent a 6-digit code to {phone ? `+91 ${phone}` : 'your phone'}
@@ -68,7 +89,14 @@ export default function Otp() {
 
       <div className="spacer-grow" />
       <p className="link-text">
-        Didn&apos;t receive the code? <button className="linklike">Resend</button>
+        Didn&apos;t receive the code?{' '}
+        <button
+          className="linklike"
+          onClick={handleResend}
+          disabled={secondsLeft > 0}
+        >
+          {secondsLeft > 0 ? `Resend in ${secondsLeft}s` : 'Resend'}
+        </button>
       </p>
     </div>
   )

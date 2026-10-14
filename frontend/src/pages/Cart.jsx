@@ -1,11 +1,16 @@
 import { useNavigate } from 'react-router-dom'
-import { useCart } from '../context/CartContext'
+import { useCart } from '../context/useCart'
 
 const DELIVERY_FEE = 2.5
 
 export default function Cart() {
-  const { items, updateQty, total } = useCart()
+  const { items, updateQty, total, clearCart } = useCart()
   const navigate = useNavigate()
+
+  const handlePlaceOrder = () => {
+    clearCart()
+    navigate('/order-success')
+  }
   const grandTotal = total + (items.length > 0 ? DELIVERY_FEE : 0)
 
   return (
@@ -68,7 +73,7 @@ export default function Cart() {
             <button
               className="btn-primary"
               style={{ marginTop: 16 }}
-              onClick={() => alert('Order placed! (demo)')}
+              onClick={handlePlaceOrder}
             >
               Place order
             </button>

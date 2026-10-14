@@ -1,6 +1,5 @@
-import { createContext, useContext, useState } from 'react'
-
-const CartContext = createContext(null)
+import { useState } from 'react'
+import { CartContext } from './cart-context'
 
 export function CartProvider({ children }) {
   const [items, setItems] = useState([])
@@ -29,20 +28,18 @@ export function CartProvider({ children }) {
     setItems((prev) => prev.filter((i) => i.id !== id))
   }
 
+  const clearCart = () => setItems([])
+
   const total = items.reduce((sum, i) => sum + i.price * i.qty, 0)
   const count = items.reduce((sum, i) => sum + i.qty, 0)
 
   return (
     <CartContext.Provider
-      value={{ items, addItem, updateQty, removeItem, total, count }}
+      value={{ items, addItem, updateQty, removeItem, clearCart, total, count }}
     >
       {children}
     </CartContext.Provider>
   )
 }
 
-export function useCart() {
-  const ctx = useContext(CartContext)
-  if (!ctx) throw new Error('useCart must be used within CartProvider')
-  return ctx
-}
+

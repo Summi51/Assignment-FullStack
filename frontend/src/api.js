@@ -1,6 +1,9 @@
 import axios from 'axios'
 
-const BASE_URL = 'http://localhost:3001'
+// In production (Vercel) the frontend and backend are served from the same
+// domain via a rewrite, so requests to "/api/..." work without a base URL.
+// For local development, fall back to the backend dev server.
+const BASE_URL = import.meta.env.VITE_API_URL || (import.meta.env.DEV ? 'http://localhost:3001' : '')
 
 const api = axios.create({ baseURL: BASE_URL })
 
